@@ -29,39 +29,13 @@ impl ResponseScheme for GetTodoQueryResponse {
     }
 }
 
-pub struct ResponseVec<'a>(&'a [GetTodoQueryResponse]);
-impl<'a> From<ResponseVec<'a>> for Vec<Todo> {
-    fn from(mapped: ResponseVec) -> Self {
-        let responses = mapped.0;
-
-        responses
-            .iter()
-            .into_group_map_by(|res| &res.todo_id)
-            .values()
-            .map(|res_group| {
-                let domain_tags: Vec<Tag> = res_group
-                    .iter()
-                    .map(|res| Tag::new(&res.tag_id, &res.tag_name, &res.tag_color))
-                    .collect();
-
-                let res = res_group[0];
-
-                Todo::new(
-                    &res.todo_id, &res.todo_name, res.todo_memo.as_ref().unwrap_or(&"".to_string()),
-                    domain_tags
-                )
-            })
-            .collect()
-    }
-}
-
-
 pub struct GetTodoQuery<'a>(&'a mut DbSession, String);
 impl<'a> GetTodoQuery<'a> {
     pub fn new(session: &'a mut DbSession, query_id: &str) -> Self {
         Self(session, query_id.to_string())
     }
 }
+
 impl<'a> Query for GetTodoQuery<'a> {
     type ResponseScheme = GetTodoQueryResponse;
 
@@ -77,10 +51,27 @@ impl<'a> Query for GetTodoQuery<'a> {
             .map_err(QueryError)
     }
 }
+
 impl<'a> DomainCompatibleQuery for GetTodoQuery<'a> {
     type Domain = Todo;
 
-    fn to_domain(response: &[Self::ResponseScheme]) -> Vec<Self::Domain> {
-        ResponseVec(response).into()
+    fn to_domain(responses: &[Self::ResponseScheme]) -> Vec<Self::Domain> {
+        responses
+            .iter()
+            .into_group_map_by(|res| &res.todo_id)
+            .values()
+            .map(|res_group| {
+                let domain_tags: Vec<Tag> = res_group
+                    .iter()
+                    .map(|res| Tag::new(&res.tag_id, &res.tag_name, &res.tag_color))
+                    .collect();
+                let res = res_group[0];
+
+                Todo::new(
+                    &res.todo_id, &res.todo_name, res.todo_memo.as_ref().unwrap_or(&"".to_string()),
+                    domain_tags
+                )
+            })
+            .collect()
     }
 }
