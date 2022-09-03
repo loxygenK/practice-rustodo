@@ -1,13 +1,13 @@
 use diesel::prelude::*;
 use itertools::Itertools;
 
-use crate::domain::{Todo, Tag};
+use crate::domain::{Tag, Todo};
 
-use super::{ResponseScheme, Query, QueryError, DomainCompatibleQuery};
-use super::session::DbSession;
-use super::schema::todos;
 use super::schema::tags;
+use super::schema::todos;
+use super::session::DbSession;
 use super::QueryResult;
+use super::{DomainCompatibleQuery, Query, QueryError, ResponseScheme};
 
 // TODO: Can I make this more structure-ish? (Like nesting structure, no so much neccesary though)
 #[derive(Debug, Queryable)]
@@ -17,14 +17,28 @@ pub struct GetTodoQueryResponse {
     todo_memo: Option<String>,
     tag_id: String,
     tag_name: String,
-    tag_color: String
+    tag_color: String,
 }
 
 impl ResponseScheme for GetTodoQueryResponse {
-    type Columns = (todos::todo_id, todos::name, todos::memo, tags::tag_id, tags::name, tags::color);
+    type Columns = (
+        todos::todo_id,
+        todos::name,
+        todos::memo,
+        tags::tag_id,
+        tags::name,
+        tags::color,
+    );
 
     fn columns() -> Self::Columns {
-        (todos::todo_id, todos::name, todos::memo, tags::tag_id, tags::name, tags::color)
+        (
+            todos::todo_id,
+            todos::name,
+            todos::memo,
+            tags::tag_id,
+            tags::name,
+            tags::color,
+        )
     }
 }
 
@@ -39,9 +53,9 @@ impl<'a> Query for GetTodoQuery<'a> {
     type ResponseScheme = GetTodoQueryResponse;
 
     fn execute(&mut self) -> QueryResult<Vec<Self::ResponseScheme>> {
-        use super::schema::todos::dsl::*;
-        use super::schema::tags::dsl::*;
         use super::schema::rel_todos_tags::dsl::rel_todos_tags;
+        use super::schema::tags::dsl::*;
+        use super::schema::todos::dsl::*;
 
         let conn = &mut self.0;
         let query_id = &self.1;
@@ -71,8 +85,10 @@ impl<'a> DomainCompatibleQuery for GetTodoQuery<'a> {
                 let res = res_group[0];
 
                 Todo::new(
-                    &res.todo_id, &res.todo_name, res.todo_memo.as_ref().unwrap_or(&"".to_string()),
-                    domain_tags
+                    &res.todo_id,
+                    &res.todo_name,
+                    res.todo_memo.as_ref().unwrap_or(&"".to_string()),
+                    domain_tags,
                 )
             })
             .collect()

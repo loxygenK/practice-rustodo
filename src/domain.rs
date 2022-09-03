@@ -12,7 +12,7 @@ impl Todo {
             id: id.to_string(),
             name: name.to_string(),
             memo: memo.to_string(),
-            tags
+            tags,
         }
     }
 }
@@ -21,7 +21,7 @@ impl Todo {
 pub struct Tag {
     id: String,
     name: String,
-    color: String
+    color: String,
 }
 
 impl Tag {
@@ -29,7 +29,7 @@ impl Tag {
         Self {
             id: id.to_string(),
             name: name.to_string(),
-            color: color.to_string()
+            color: color.to_string(),
         }
     }
 }

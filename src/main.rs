@@ -1,7 +1,7 @@
 use db::{todo::GetTodoQuery, DomainCompatibleQuery};
 
-mod domain;
 pub mod db;
+mod domain;
 
 fn main() {
     dotenv::dotenv().ok();
@@ -10,7 +10,10 @@ fn main() {
 
     let mut connection = db::session::DbSession::establish(&database_url).expect("Fail");
 
-    println!("{:#?}", GetTodoQuery::new(&mut connection, "1740f5e5-91b5-467a-8e2d-a2c14cbae9e6").load());
+    println!(
+        "{:#?}",
+        GetTodoQuery::new(&mut connection, "1740f5e5-91b5-467a-8e2d-a2c14cbae9e6").load()
+    );
 
     // get_todo(&mut connection, "1740f5e5-91b5-467a-8e2d-a2c14cbae9e6");
 }
