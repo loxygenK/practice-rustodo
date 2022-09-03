@@ -9,16 +9,16 @@ diesel::table! {
 }
 
 diesel::table! {
-    tags (id) {
-        id -> Bpchar,
+    tags (tag_id) {
+        tag_id -> Bpchar,
         name -> Varchar,
         color -> Bpchar,
     }
 }
 
 diesel::table! {
-    todos (id) {
-        id -> Bpchar,
+    todos (todo_id) {
+        todo_id -> Bpchar,
         name -> Varchar,
         memo -> Nullable<Text>,
     }
