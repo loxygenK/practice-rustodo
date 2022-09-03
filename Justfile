@@ -7,12 +7,12 @@ setup: install
 	diesel setup
 
 # Generate migration script. Migration name must follow the command.
-migrate-gen: setup
-	disesel mirgation Generate
+migrate-gen NAME: setup
+	diesel migration generate {{NAME}}
 
 # Actually execute migration.
 migrate-do:
-	diesel migration ru
+	diesel migration run
 
 # Revert the migration.
 migrate-revert:
