@@ -52,9 +52,11 @@ impl<'a> Query for GetTodoQuery<'a> {
     type ResponseScheme = GetTodoQueryResponse;
 
     fn execute(&mut self) -> QueryResult<Vec<Self::ResponseScheme>> {
-        use crate::repository::postgres::schema::rel_todos_tags::dsl::rel_todos_tags;
-        use crate::repository::postgres::schema::tags::dsl::*;
-        use crate::repository::postgres::schema::todos::dsl::*;
+        use crate::repository::postgres::schema::{
+            rel_todos_tags::dsl::rel_todos_tags,
+            tags::dsl::*,
+            todos::dsl::*
+        };
 
         let conn = &mut self.0;
         let query_id = &self.1;
