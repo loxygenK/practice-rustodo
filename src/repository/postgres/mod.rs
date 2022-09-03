@@ -2,6 +2,7 @@ use diesel::result::Error;
 
 mod schema;
 pub mod todo;
+pub mod init;
 
 #[derive(thiserror::Error, Debug)]
 #[error(transparent)]
