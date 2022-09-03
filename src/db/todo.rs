@@ -5,9 +5,8 @@ use crate::domain::{Todo, Tag};
 
 use super::{ResponseScheme, Query, QueryError, DomainCompatibleQuery};
 use super::session::DbSession;
-use super::schema::todos::{self, dsl::{*, id as todo_id}};
-use super::schema::tags::{self, dsl::*};
-use super::schema::rel_todos_tags::dsl::*;
+use super::schema::todos;
+use super::schema::tags;
 use super::QueryResult;
 
 // TODO: Can I make this more structure-ish? (Like nesting structure, no so much neccesary though)
@@ -40,6 +39,10 @@ impl<'a> Query for GetTodoQuery<'a> {
     type ResponseScheme = GetTodoQueryResponse;
 
     fn execute(&mut self) -> QueryResult<Vec<Self::ResponseScheme>> {
+        use super::schema::todos::dsl::{*, id as todo_id};
+        use super::schema::tags::dsl::*;
+        use super::schema::rel_todos_tags::dsl::rel_todos_tags;
+
         let conn = &mut self.0;
         let query_id = &self.1;
 
