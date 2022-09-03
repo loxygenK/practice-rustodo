@@ -21,10 +21,10 @@ pub struct GetTodoQueryResponse {
 }
 
 impl ResponseScheme for GetTodoQueryResponse {
-    type Columns = (todos::id, todos::name, todos::memo, tags::id, tags::name, tags::color);
+    type Columns = (todos::todo_id, todos::name, todos::memo, tags::tag_id, tags::name, tags::color);
 
     fn columns() -> Self::Columns {
-        (todos::id, todos::name, todos::memo, tags::id, tags::name, tags::color)
+        (todos::todo_id, todos::name, todos::memo, tags::tag_id, tags::name, tags::color)
     }
 }
 
@@ -39,7 +39,7 @@ impl<'a> Query for GetTodoQuery<'a> {
     type ResponseScheme = GetTodoQueryResponse;
 
     fn execute(&mut self) -> QueryResult<Vec<Self::ResponseScheme>> {
-        use super::schema::todos::dsl::{*, id as todo_id};
+        use super::schema::todos::dsl::*;
         use super::schema::tags::dsl::*;
         use super::schema::rel_todos_tags::dsl::rel_todos_tags;
 
