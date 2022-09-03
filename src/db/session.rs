@@ -7,7 +7,7 @@ use diesel::{PgConnection, Connection};
 pub struct ConnectionError(diesel::ConnectionError);
 
 pub struct DbSession {
-    connection: PgConnection
+    pub(super) connection: PgConnection
 }
 impl DbSession {
     /// Establishes the connection between the database and the application.
