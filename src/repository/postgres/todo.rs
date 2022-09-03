@@ -1,11 +1,11 @@
 use diesel::prelude::*;
 use itertools::Itertools;
 
+use crate::db::DbSession;
 use crate::domain::{Tag, Todo};
 
 use super::schema::tags;
 use super::schema::todos;
-use super::session::DbSession;
 use super::QueryResult;
 use super::{DomainCompatibleQuery, Query, QueryError, ResponseScheme};
 

@@ -1,14 +1,16 @@
-use db::{todo::GetTodoQuery, DomainCompatibleQuery};
-
 pub mod db;
+pub mod repository;
 mod domain;
+
+use crate::{db::DbSession, repository::postgres::{todo::GetTodoQuery, DomainCompatibleQuery}};
+
 
 fn main() {
     dotenv::dotenv().ok();
 
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL to be supplied");
 
-    let mut connection = db::session::DbSession::establish(&database_url).expect("Fail");
+    let mut connection = DbSession::establish(&database_url).expect("Fail");
 
     println!(
         "{:#?}",

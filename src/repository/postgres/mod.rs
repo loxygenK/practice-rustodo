@@ -1,7 +1,6 @@
 use diesel::result::Error;
 
 mod schema;
-pub mod session;
 pub mod todo;
 
 #[derive(thiserror::Error, Debug)]
