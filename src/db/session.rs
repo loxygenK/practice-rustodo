@@ -3,10 +3,8 @@ use thiserror::Error;
 use diesel::{PgConnection, Connection};
 
 #[derive(Error, Debug)]
-#[error("DB connection failed!: {source}")]
-pub struct ConnectionError {
-    source: diesel::ConnectionError
-}
+#[error(transparent)]
+pub struct ConnectionError(diesel::ConnectionError);
 
 pub struct DbSession {
     connection: PgConnection
@@ -14,7 +12,7 @@ pub struct DbSession {
 impl DbSession {
     /// Establishes the connection between the database and the application.
     pub fn establish(database_url: &str) -> Result<DbSession, ConnectionError> {
-        let connection = PgConnection::establish(database_url).map_err(|e| ConnectionError { source: e })?;
+        let connection = PgConnection::establish(database_url).map_err(ConnectionError)?;
 
         Ok(Self { connection })
     }
