@@ -1,4 +1,4 @@
-use db::{todo::GetTodoQuery, Query, DomainCompatibleQuery};
+use db::{todo::GetTodoQuery, DomainCompatibleQuery};
 
 mod domain;
 pub mod db;
