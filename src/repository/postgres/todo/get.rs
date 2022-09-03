@@ -1,13 +1,12 @@
-use diesel::prelude::*;
 use itertools::Itertools;
+use diesel::prelude::*;
+
+use crate::repository::postgres::{
+    init::DbSession, schema::{tags, todos},
+    ResponseScheme, QueryError, QueryResult, Query, DomainCompatibleQuery
+};
 
 use crate::domain::{Tag, Todo};
-
-use super::schema::tags;
-use super::schema::todos;
-use super::session::DbSession;
-use super::QueryResult;
-use super::{DomainCompatibleQuery, Query, QueryError, ResponseScheme};
 
 // TODO: Can I make this more structure-ish? (Like nesting structure, no so much neccesary though)
 #[derive(Debug, Queryable)]
@@ -53,9 +52,11 @@ impl<'a> Query for GetTodoQuery<'a> {
     type ResponseScheme = GetTodoQueryResponse;
 
     fn execute(&mut self) -> QueryResult<Vec<Self::ResponseScheme>> {
-        use super::schema::rel_todos_tags::dsl::rel_todos_tags;
-        use super::schema::tags::dsl::*;
-        use super::schema::todos::dsl::*;
+        use crate::repository::postgres::schema::{
+            rel_todos_tags::dsl::rel_todos_tags,
+            tags::dsl::*,
+            todos::dsl::*
+        };
 
         let conn = &mut self.0;
         let query_id = &self.1;

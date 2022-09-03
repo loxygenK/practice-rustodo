@@ -1,8 +1,8 @@
 use diesel::result::Error;
 
 mod schema;
-pub mod session;
 pub mod todo;
+pub mod init;
 
 #[derive(thiserror::Error, Debug)]
 #[error(transparent)]

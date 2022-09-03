@@ -1,6 +1,6 @@
-use db::{todo::GetTodoQuery, DomainCompatibleQuery};
+use crate::repository::{postgres::{todo::PostgresTodoRepository, init::DbSession}, traits::todo::TodoRepository};
 
-pub mod db;
+pub mod repository;
 mod domain;
 
 fn main() {
@@ -8,12 +8,8 @@ fn main() {
 
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL to be supplied");
 
-    let mut connection = db::session::DbSession::establish(&database_url).expect("Fail");
+    let session = DbSession::establish(&database_url).expect("Fail");
+    let mut repo = PostgresTodoRepository::new(session);
 
-    println!(
-        "{:#?}",
-        GetTodoQuery::new(&mut connection, "1740f5e5-91b5-467a-8e2d-a2c14cbae9e6").load()
-    );
-
-    // get_todo(&mut connection, "1740f5e5-91b5-467a-8e2d-a2c14cbae9e6");
+    println!("{:#?}", repo.get("1740f5e5-91b5-467a-8e2d-a2c14cbae9e6"));
 }
