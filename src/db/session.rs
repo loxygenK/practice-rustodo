@@ -1,22 +1,11 @@
-use std::{fmt::Display, error::Error};
+use thiserror::Error;
 
 use diesel::{PgConnection, Connection};
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
+#[error("DB connection failed!: {source}")]
 pub struct ConnectionError {
     source: diesel::ConnectionError
-}
-impl Display for ConnectionError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "The problem has occured during establishing connection between database: {:#?}", self.source);
-
-        Ok(())
-    }
-}
-impl Error for ConnectionError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        Some(&self.source)
-    }
 }
 
 pub struct DbSession {
