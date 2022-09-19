@@ -1,5 +1,5 @@
 pub mod context;
-pub mod todo;
+pub mod routes;
 pub mod schema;
 pub mod error;
 
@@ -7,7 +7,7 @@ use warp::Filter;
 
 use crate::{repository::Repositories, helpers::new_shared};
 
-use self::todo::todo_route;
+use self::routes::todo::todo_route;
 
 pub async fn generate_rest_endpoint(session: Repositories) {
     let shared_session = new_shared(session);
