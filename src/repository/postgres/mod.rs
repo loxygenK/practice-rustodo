@@ -24,9 +24,9 @@ pub trait Query {
 pub trait DomainCompatibleQuery: Query {
     type Domain;
 
-    fn to_domain(response: &[Self::ResponseScheme]) -> Vec<Self::Domain>;
+    fn to_domain(response: &[Self::ResponseScheme]) -> Self::Domain;
 
-    fn load(&mut self) -> QueryResult<Vec<Self::Domain>> {
+    fn load(&mut self) -> QueryResult<Self::Domain> {
         let response = self.execute()?;
 
         Ok(Self::to_domain(&response))
