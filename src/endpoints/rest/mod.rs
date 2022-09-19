@@ -1,6 +1,6 @@
 pub mod context;
 pub mod todo;
-pub mod scheme;
+pub mod schema;
 pub mod error;
 
 use warp::Filter;
@@ -13,7 +13,7 @@ pub async fn generate_rest_endpoint(session: Repositories) {
     let shared_session = new_shared(session);
 
     let routes = warp::any()
-        .and(todo_route(shared_session.clone()));
+        .and(todo_route(&shared_session));
         //.and(other)
 
     warp::serve(routes)
