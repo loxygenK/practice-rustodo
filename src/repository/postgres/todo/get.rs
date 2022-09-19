@@ -73,7 +73,7 @@ impl<'a> Query for GetTodoQuery<'a> {
 impl<'a> DomainCompatibleQuery for GetTodoQuery<'a> {
     type Domain = Todo;
 
-    fn to_domain(responses: &[Self::ResponseScheme]) -> Vec<Self::Domain> {
+    fn to_domain(responses: &[Self::ResponseScheme]) -> Self::Domain {
         responses
             .iter()
             .into_group_map_by(|res| &res.todo_id)
@@ -92,6 +92,8 @@ impl<'a> DomainCompatibleQuery for GetTodoQuery<'a> {
                     domain_tags,
                 )
             })
-            .collect()
+            .take(1)
+            .next()
+            .unwrap()
     }
 }

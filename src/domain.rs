@@ -1,9 +1,9 @@
 #[derive(Debug)]
 pub struct Todo {
-    id: String,
-    name: String,
-    memo: String,
-    tags: Vec<Tag>,
+    pub id: String,
+    pub name: String,
+    pub memo: String,
+    pub tags: Vec<Tag>,
 }
 
 impl Todo {
@@ -19,9 +19,9 @@ impl Todo {
 
 #[derive(Debug)]
 pub struct Tag {
-    id: String,
-    name: String,
-    color: String,
+    pub id: String,
+    pub name: String,
+    pub color: String,
 }
 
 impl Tag {
