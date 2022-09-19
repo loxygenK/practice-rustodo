@@ -1,16 +1,13 @@
-pub mod get;
-
 use crate::domain::Todo;
+use crate::endpoints::rest::context::with_db;
+use crate::endpoints::rest::error::reject_anyhow;
+use crate::endpoints::rest::schema::RESTTodoSchema;
 use crate::helpers::Shared;
 use crate::repository::Repositories;
 use crate::service;
 
 use warp::{Filter, Reply};
 use warp::filters::BoxedFilter;
-
-use super::context::with_db;
-use super::error::reject_anyhow;
-use super::schema::RESTTodoSchema;
 
 pub fn todo_route(shared_session: &Shared<Repositories>) -> BoxedFilter<(impl Reply,)> {
     let todo_get = warp::get()
